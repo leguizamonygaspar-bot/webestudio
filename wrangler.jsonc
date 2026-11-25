@@ -1,0 +1,11 @@
+// Configuración de Cloudflare Workers: sitio estático, sin código de servidor.
+// "name" tiene que ser IGUAL al nombre del proyecto en el panel de Cloudflare.
+{
+  "name": "leguizamon-gaspar",
+  "compatibility_date": "2026-11-25",
+  "assets": {
+    "directory": "./",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}
