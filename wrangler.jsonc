@@ -7,5 +7,10 @@
     "directory": "./",
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
-  }
+  },
+  // Dominio propio (la zona está en esta misma cuenta de Cloudflare)
+  "routes": [
+    { "pattern": "leguizamonjubilaciones.com.ar", "custom_domain": true },
+    { "pattern": "www.leguizamonjubilaciones.com.ar", "custom_domain": true }
+  ]
 }
