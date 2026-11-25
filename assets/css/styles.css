@@ -322,6 +322,15 @@ mark.pend { background: #fff1b8; color: #5c4400; padding: 0 .2em; font-size: .9e
 .canales a span:last-child { font-size: 1.1rem; }
 .contacto__horario { color: #dfe3ec; font-size: .98rem; }
 
+.mapa { margin: 1.75rem 0 0; }
+.mapa iframe {
+  display: block; width: 100%; height: 15rem; border: 1px solid rgba(212, 183, 122, .45);
+  filter: saturate(.85);
+}
+.mapa figcaption { margin-top: .6rem; font-size: .92rem; }
+.mapa figcaption a { color: #dfe3ec; text-decoration-color: var(--dorado-claro); text-underline-offset: 4px; }
+@media (min-width: 56rem) { .mapa iframe { height: 17rem; } }
+
 .form { background: var(--papel); color: var(--tinta); padding: 1.5rem; border-top: 3px solid var(--dorado); }
 .form__titulo { font-family: var(--caslon); font-size: 1.35rem; color: var(--azul); margin-bottom: 1.25rem; }
 .campo { margin-bottom: 1rem; }
@@ -346,6 +355,7 @@ mark.pend { background: #fff1b8; color: #5c4400; padding: 0 .2em; font-size: .9e
 /* ---------- Pie ---------- */
 .pie { background: var(--azul-hondo); color: #b9c0cf; font-size: .92rem; padding: 2.25rem 0; }
 .pie p { margin: 0 0 .3rem; }
+.pie__redes a { color: #dfe3ec; text-decoration-color: var(--dorado-claro); text-underline-offset: 3px; margin-right: 1.25rem; }
 .pie__nombre { font-family: var(--caslon); color: #fff; font-size: 1.1rem; margin-bottom: .6rem !important; }
 
 /* ---------- 404 ---------- */
