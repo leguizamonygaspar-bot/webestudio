@@ -1,0 +1,367 @@
+/* ==========================================================
+   Estudio Jurídico Leguizamón & Gaspar
+   Idea: el expediente. Papel oficio, tinta azul, sello dorado.
+   Una sola audacia: el título "Jubilación docente IPS" en Caslon grande.
+   Plan completo en /plan-diseno.md
+   ========================================================== */
+
+@font-face {
+  font-family: "Libre Caslon Text";
+  src: url("../fonts/libre-caslon-text-400.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Libre Caslon Text";
+  src: url("../fonts/libre-caslon-text-700.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+:root {
+  /* Paleta */
+  --azul: #1b2740;          /* azul expediente: fondos fuertes y títulos */
+  --azul-hondo: #141d31;    /* pie */
+  --dorado: #b48a3c;        /* sello: números de foja, reglas, foco */
+  --dorado-claro: #d4b77a;  /* dorado para texto sobre azul */
+  --dorado-texto: #7a5b1f;  /* dorado para texto sobre claro (AA) */
+  --papel: #ffffff;         /* papel oficio */
+  --legajo: #eef0f3;        /* gris azulado frío para secciones alternas */
+  --tinta: #1d2230;
+  --gris: #4f5767;
+  --regla: #cdd3dc;         /* reglas finas, como las de un formulario */
+  --wa: #1f8f4e;            /* verde WhatsApp oscurecido (AA) */
+
+  /* Tipografía */
+  --caslon: "Libre Caslon Text", "Palatino Linotype", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --ancho: 70rem;
+  --barra: 3.75rem;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--tinta);
+  background: var(--papel);
+  padding-bottom: 4.5rem; /* lugar para el botón fijo de WhatsApp en el celular */
+}
+
+/* Escala 1.25 sobre 17px. Caslon solo en títulos. */
+h1, h2, h3 { font-family: var(--caslon); font-weight: 400; line-height: 1.15; margin: 0 0 .6em; color: var(--azul); }
+h2 { font-size: clamp(2rem, 1.6rem + 1.6vw, 2.65rem); letter-spacing: -.01em; }
+h3 { font-size: 1.3rem; line-height: 1.25; }
+p { margin: 0 0 1em; }
+a { color: inherit; }
+ul, ol { margin: 0; padding: 0; }
+img { max-width: 100%; }
+
+:focus-visible { outline: 3px solid var(--dorado); outline-offset: 3px; }
+
+.wrap { width: 100%; max-width: var(--ancho); margin: 0 auto; padding: 0 1.25rem; }
+@media (min-width: 56rem) { .wrap { padding: 0 2.5rem; } }
+.angosto { max-width: 48rem; }
+
+.skip {
+  position: absolute; left: .5rem; top: -3rem; z-index: 100;
+  background: var(--azul); color: #fff; padding: .5rem 1rem;
+}
+.skip:focus { top: .5rem; }
+
+/* Marca de datos faltantes (solo para el borrador) */
+mark.pend { background: #fff1b8; color: #5c4400; padding: 0 .2em; font-size: .9em; }
+
+/* ---------- Barra superior ---------- */
+.top {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--azul); color: #fff;
+  border-bottom: 1px solid rgba(212, 183, 122, .3);
+}
+.top__inner { display: flex; align-items: center; justify-content: flex-end; gap: 1rem; min-height: var(--barra); }
+
+.menu { position: relative; }
+.menu__boton {
+  display: inline-flex; align-items: center; gap: .6rem;
+  min-height: 2.6rem; padding: .4rem .9rem;
+  font: inherit; font-size: .95rem; color: #fff;
+  background: transparent; border: 1px solid rgba(212, 183, 122, .7); border-radius: 3px;
+  cursor: pointer;
+}
+.menu__barras, .menu__barras::before, .menu__barras::after {
+  display: block; width: 1.1rem; height: 2px; background: var(--dorado-claro); position: relative;
+  transition: transform .2s, background-color .2s;
+}
+.menu__barras::before, .menu__barras::after { content: ""; position: absolute; left: 0; }
+.menu__barras::before { top: -6px; }
+.menu__barras::after { top: 6px; }
+.menu__boton[aria-expanded="true"] .menu__barras { background: transparent; }
+.menu__boton[aria-expanded="true"] .menu__barras::before { transform: translateY(6px) rotate(45deg); }
+.menu__boton[aria-expanded="true"] .menu__barras::after { transform: translateY(-6px) rotate(-45deg); }
+
+.menu__lista {
+  position: absolute; right: 0; top: calc(100% + .6rem);
+  min-width: 15rem; padding: .3rem 0;
+  background: var(--papel); border: 1px solid var(--regla); border-top: 3px solid var(--dorado);
+  box-shadow: 0 12px 28px rgba(20, 29, 49, .22);
+  display: flex; flex-direction: column;
+}
+.menu__lista[hidden] { display: none; }
+.menu__lista a { color: var(--azul); text-decoration: none; padding: .7rem 1.2rem; font-size: .98rem; }
+.menu__lista a + a { border-top: 1px solid var(--legajo); }
+.menu__lista a:hover { background: var(--legajo); }
+@media (prefers-reduced-motion: reduce) { .menu__barras, .menu__barras::before, .menu__barras::after { transition: none; } }
+
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+  min-height: 3rem; padding: .7rem 1.35rem;
+  font: inherit; font-weight: 600; font-size: 1rem;
+  text-decoration: none; border-radius: 3px; border: 2px solid transparent;
+  cursor: pointer;
+}
+.btn--wa { background: var(--wa); color: #fff; }
+.btn--wa:hover { background: #187a42; }
+.btn--linea { border-color: rgba(255, 255, 255, .6); color: #fff; }
+.btn--linea:hover { background: #fff; color: var(--azul); border-color: #fff; }
+.btn--dorado { background: var(--azul); color: #fff; }
+.btn--dorado:hover { background: #26365a; }
+.btn[disabled] { opacity: .6; cursor: wait; }
+
+.ico { width: 1.2em; height: 1.2em; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+
+/* ---------- Banda del sello ---------- */
+.hero { background: var(--azul); color: #fff; }
+.hero__inner {
+  display: flex; align-items: center; gap: 1.25rem;
+  padding-top: 1.5rem; padding-bottom: 1.5rem;
+}
+.hero__logo {
+  flex: none; width: 6.5rem; height: auto; border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(212, 183, 122, .35);
+}
+.hero__nombre {
+  margin: 0 0 .3rem; font-family: var(--caslon); color: #fff;
+  font-size: clamp(1.7rem, 1rem + 3vw, 3.2rem); line-height: 1.05; letter-spacing: -.01em;
+}
+.hero__lugar {
+  margin: 0; font-family: var(--caslon); font-size: 1rem; line-height: 1.35;
+  color: var(--dorado-claro);
+}
+@media (min-width: 56rem) {
+  .hero__inner { gap: 2rem; padding-top: 2rem; padding-bottom: 2rem; }
+  .hero__logo { width: 8.5rem; }
+  .hero__lugar { font-size: 1.35rem; }
+}
+
+/* ---------- Secciones ---------- */
+.seccion { padding: 3.5rem 0; scroll-margin-top: var(--barra); }
+.seccion--clara { background: var(--legajo); }
+.seccion--oscura { background: var(--azul); color: #fff; }
+.seccion--oscura h2 { color: #fff; }
+@media (min-width: 56rem) { .seccion { padding: 5.5rem 0; } }
+
+.prosa { max-width: 38rem; }
+.prosa p:last-child { margin-bottom: 0; }
+.nota { font-size: .95rem; color: var(--gris); margin: 1.25rem 0 0; }
+.bajada { color: var(--gris); max-width: 36rem; margin: 0 0 2.5rem; }
+
+.dos-col { display: grid; gap: 2.5rem; }
+@media (min-width: 56rem) {
+  .dos-col { grid-template-columns: 1.3fr 1fr; gap: 4.5rem; align-items: start; }
+}
+
+/* ---------- Jubilación docente IPS: el elemento memorable ---------- */
+/* La foto ocupa toda la banda y el texto va encima, sobre un velo azul a la izquierda */
+.intro { position: relative; padding: 0; background: var(--azul); color: #fff; overflow: hidden; }
+.intro__foto { margin: 0; position: absolute; inset: 0; }
+.intro__foto img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 35%; display: block; }
+.intro__foto::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(27, 39, 64, .84) 0%, rgba(27, 39, 64, .92) 100%);
+}
+.intro__inner { position: relative; padding-top: 3rem; padding-bottom: 3.25rem; }
+.intro h1 {
+  font-size: clamp(3rem, 1.4rem + 6.4vw, 5.6rem);
+  line-height: .98; letter-spacing: -.02em;
+  color: #fff; margin: 0 0 .45em;
+}
+.intro__lead { font-family: var(--caslon); font-size: clamp(1.25rem, 1.1rem + .6vw, 1.55rem); line-height: 1.4; color: #fff; max-width: 30rem; }
+.intro p { color: #e2e6ee; max-width: 34rem; }
+.acciones { display: flex; flex-direction: column; gap: .75rem; margin-top: 2rem; }
+.acciones .btn--linea { background: rgba(27, 39, 64, .35); }
+@media (min-width: 36rem) { .acciones { flex-direction: row; flex-wrap: wrap; } }
+@media (min-width: 56rem) {
+  .intro__foto::after {
+    background: linear-gradient(90deg,
+      rgba(27, 39, 64, .94) 0%, rgba(27, 39, 64, .82) 42%,
+      rgba(27, 39, 64, .25) 66%, rgba(27, 39, 64, 0) 80%);
+  }
+  .intro__inner { padding-top: 6rem; padding-bottom: 6rem; }
+  .intro__texto { width: 52%; }
+}
+
+/* ---------- El trámite: fojas de un expediente ---------- */
+.tramite { display: grid; gap: 1.5rem; }
+@media (min-width: 56rem) {
+  .tramite { grid-template-columns: 1fr 1.6fr; gap: 4.5rem; align-items: start; }
+  .tramite__cabeza { position: sticky; top: calc(var(--barra) + 2rem); }
+}
+
+.camino { list-style: none; border-top: 2px solid var(--azul); }
+.camino li {
+  display: grid; grid-template-columns: 3rem 1fr; gap: 0 1rem;
+  padding: 1.4rem 0; border-bottom: 1px solid var(--regla);
+}
+.camino__num {
+  font-family: var(--caslon); font-size: 2.4rem; line-height: 1; color: var(--dorado-texto);
+  padding-top: .1rem;
+}
+.camino__titulo { display: block; font-family: var(--caslon); font-weight: 400; font-size: 1.3rem; line-height: 1.25; color: var(--azul); margin-bottom: .35rem; }
+.camino__txt p { margin: 0; color: var(--gris); max-width: 34rem; }
+@media (min-width: 56rem) { .camino li { grid-template-columns: 4rem 1fr; padding: 1.75rem 0; } .camino__num { font-size: 3rem; } }
+
+.tipos { margin-top: 3rem; }
+.tipos__titulo { font-size: 1.3rem; margin-bottom: .75rem; }
+.tipos__grilla { list-style: none; border-top: 1px solid var(--regla); }
+.tipos__grilla li {
+  padding: .95rem 0; border-bottom: 1px solid var(--regla);
+  font-family: var(--caslon); font-size: 1.2rem; color: var(--azul);
+}
+@media (min-width: 40rem) {
+  .tipos__grilla { display: grid; grid-template-columns: 1fr 1fr; column-gap: 2.5rem; }
+}
+
+/* ---------- Otros temas: renglones ---------- */
+.servicios { border-top: 2px solid var(--azul); }
+.servicio { padding: 1.5rem 0; border-bottom: 1px solid var(--regla); }
+.servicio h3 { margin-bottom: .4rem; }
+.servicio p { margin: 0; color: var(--gris); max-width: 36rem; }
+.servicio__cta {
+  display: inline-block; margin-top: .8rem; padding: .3rem 0;
+  color: var(--azul); font-weight: 600; font-size: .98rem;
+  text-decoration: underline; text-decoration-color: var(--dorado);
+  text-decoration-thickness: 2px; text-underline-offset: 5px;
+}
+.servicio__cta:hover { text-decoration-color: var(--azul); }
+@media (min-width: 56rem) {
+  .servicio { display: grid; grid-template-columns: 17rem 1fr auto; gap: 2.5rem; align-items: baseline; padding: 1.75rem 0; }
+  .servicio h3 { margin: 0; }
+  .servicio__cta { margin: 0; white-space: nowrap; }
+}
+
+/* ---------- El estudio ---------- */
+.abogados { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 2.5rem; max-width: 34rem; }
+.abogado { margin: 0; }
+.abogado img {
+  width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; display: block;
+  border: 1px solid var(--regla);
+}
+.abogado figcaption { margin-top: .75rem; line-height: 1.3; }
+.abogado figcaption strong { display: block; font-family: var(--caslon); font-weight: 400; color: var(--azul); font-size: 1.08rem; }
+.abogado figcaption span { display: block; font-size: .9rem; color: var(--gris); margin-top: .15rem; }
+.abogado__tel {
+  display: inline-flex; align-items: center; gap: .4rem; margin-top: .45rem; padding: .2rem 0;
+  font-size: .98rem; font-weight: 600; color: var(--azul);
+  text-decoration: underline; text-decoration-color: var(--dorado); text-underline-offset: 4px;
+}
+.abogado__tel::before {
+  content: ""; width: .9rem; height: .9rem; flex: none; background: var(--dorado-texto);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.6 3h3l1.5 4.5-2 1.3a11 11 0 0 0 6.1 6.1l1.3-2 4.5 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.6 5.2 2 2 0 0 1 6.6 3z'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.6 3h3l1.5 4.5-2 1.3a11 11 0 0 0 6.1 6.1l1.3-2 4.5 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.6 5.2 2 2 0 0 1 6.6 3z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.ficha { margin: 0; border-top: 2px solid var(--azul); }
+.ficha div { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; padding: .9rem 0; border-bottom: 1px solid var(--regla); }
+.ficha dt { color: var(--gris); font-size: .92rem; }
+.ficha dd { margin: 0; }
+
+/* ---------- Preguntas frecuentes ---------- */
+.faq { border-top: 2px solid var(--azul); }
+.faq details { border-bottom: 1px solid var(--regla); }
+.faq summary {
+  cursor: pointer; list-style: none;
+  padding: 1.15rem 2.5rem 1.15rem 0; position: relative;
+  font-family: var(--caslon); font-size: 1.15rem; line-height: 1.35; color: var(--azul);
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+"; position: absolute; right: .25rem; top: 50%; transform: translateY(-50%);
+  font-family: var(--sans); font-size: 1.5rem; font-weight: 300; color: var(--dorado-texto);
+}
+.faq details[open] summary::after { content: "–"; }
+.faq details p { margin: 0 0 1.25rem; color: var(--gris); max-width: 40rem; }
+.faq details ul { margin: -.5rem 0 1.25rem 1.25rem; color: var(--gris); max-width: 40rem; }
+.faq details li { margin-bottom: .35rem; }
+
+/* ---------- Contacto ---------- */
+.contacto__aviso { color: #dfe3ec; max-width: 30rem; }
+.canales { list-style: none; margin: 1.75rem 0; border-top: 1px solid rgba(255, 255, 255, .2); }
+.canales a {
+  display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; align-items: baseline;
+  text-decoration: none; padding: .95rem 0; border-bottom: 1px solid rgba(255, 255, 255, .2);
+  overflow-wrap: anywhere;
+}
+.canales a:hover span:last-child { text-decoration: underline; text-decoration-color: var(--dorado-claro); text-underline-offset: 4px; }
+.canales__tipo { font-size: .92rem; color: var(--dorado-claro); }
+.canales__fila {
+  display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; align-items: baseline;
+  padding: .95rem 0; border-bottom: 1px solid rgba(255, 255, 255, .2);
+}
+.canales__numeros { display: flex; flex-direction: column; gap: .35rem; }
+.canales .canales__numeros a {
+  display: block; padding: 0; border: 0; font-size: 1.1rem; text-decoration: none;
+}
+.canales__numeros small { font-size: .85rem; color: #b9c0cf; margin-left: .4rem; }
+.canales__numeros a:hover { text-decoration: underline; text-decoration-color: var(--dorado-claro); text-underline-offset: 4px; }
+.canales a span:last-child { font-size: 1.1rem; }
+.contacto__horario { color: #dfe3ec; font-size: .98rem; }
+
+.form { background: var(--papel); color: var(--tinta); padding: 1.5rem; border-top: 3px solid var(--dorado); }
+.form__titulo { font-family: var(--caslon); font-size: 1.35rem; color: var(--azul); margin-bottom: 1.25rem; }
+.campo { margin-bottom: 1rem; }
+.campo label { display: block; font-weight: 600; font-size: .95rem; margin-bottom: .35rem; }
+.opcional { font-weight: 400; color: var(--gris); }
+.campo input, .campo textarea {
+  width: 100%; font: inherit; color: inherit;
+  padding: .7rem .8rem; border: 1px solid #a9b1bd; border-radius: 2px; background: #fff;
+}
+.campo input:focus-visible, .campo textarea:focus-visible { outline: 3px solid var(--dorado); outline-offset: 1px; border-color: var(--azul); }
+.campo [aria-invalid="true"] { border-color: #b3261e; }
+.error { color: #b3261e; font-size: .9rem; margin: .3rem 0 0; }
+.trampa { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.privacidad { font-size: .85rem; color: var(--gris); }
+.form .btn { width: 100%; }
+.form__estado { margin: 1rem 0 0; font-weight: 600; }
+.form__estado:empty { display: none; }
+.form__estado.ok { color: #1f6b3d; }
+.form__estado.mal { color: #b3261e; }
+@media (min-width: 56rem) { .form { padding: 2rem 2.25rem; } }
+
+/* ---------- Pie ---------- */
+.pie { background: var(--azul-hondo); color: #b9c0cf; font-size: .92rem; padding: 2.25rem 0; }
+.pie p { margin: 0 0 .3rem; }
+.pie__nombre { font-family: var(--caslon); color: #fff; font-size: 1.1rem; margin-bottom: .6rem !important; }
+
+/* ---------- 404 ---------- */
+.no-encontrada { min-height: 100vh; display: flex; align-items: center; }
+.no-encontrada h1 { color: #fff; font-size: clamp(2.2rem, 1.6rem + 2.5vw, 3.2rem); margin-top: 1.75rem; }
+.no-encontrada p { color: #dfe3ec; }
+
+/* ---------- WhatsApp fijo ---------- */
+.wa-fijo {
+  position: fixed; right: 1rem; bottom: 1rem; z-index: 30;
+  display: inline-flex; align-items: center; gap: .5rem;
+  min-height: 3.25rem; padding: .75rem 1.15rem;
+  background: var(--wa); color: #fff;
+  font-weight: 600; text-decoration: none;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(20, 29, 49, .3);
+}
+.wa-fijo:hover { background: #187a42; }
+@media (min-width: 56rem) { body { padding-bottom: 0; } }
