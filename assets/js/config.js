@@ -5,6 +5,5 @@ window.SITIO = {
   // Mensaje que aparece escrito al abrir el chat
   mensajeWhatsapp: "Hola, quiero hacer una consulta por mi jubilación docente.",
   // Dirección del formulario en Formspree (https://formspree.io/f/XXXXXXX)
-  // [[PENDIENTE: crear el formulario en Formspree con el mail del estudio y pegar acá la URL]]
-  formulario: ""
+  formulario: "https://formspree.io/f/mbgowpgk"
 };
